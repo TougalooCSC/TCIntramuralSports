@@ -45,7 +45,6 @@ def init_db():
 		db.commit()
 
 
-
 @app.route('/')
 def show_entries():
 	db = get_db()
@@ -88,11 +87,34 @@ def logout():
 	return redirect(url_for('show_entries'))
 
 
+@app.route('/teams', methods=['POST'])
+def add_team():
+	print request.form #for debugging purposes
+	db = get_db()
+	cur = db.execute('insert into teams (name) values (?)', [request.form['name']])
+	db.commit()
+	return redirect(url_for('show_teams'))
+
+@app.route('/teams')
+def show_teams():
+	db = get_db()
+	cur = db.execute('select id, name from teams')
+	teams = cur.fetchall()
+	return render_template('show_teams.html', teams=teams)
+
 
 @app.route('/players', methods=['POST'])
 def add_player():
+	print request.form # for debugging
 	db = get_db()
-	print request.form
+	cur = db.execute("select id, name from teams where name=?", (request.form['team'],))
+	teams = cur.fetchall()
+	print teams
+	if len(teams) == 0:
+		cur = db.execute("insert into teams (name) values (?)", [request.form['team']])
+		db.commit()
+		teams = cur.fetchall()
+		print teams
 	cur = db.execute('insert into players (firstname, lastname, playernumber, position) values (?,?,?,?)', [request.form['firstname'], request.form['lastname'], request.form['number'], request.form['position']])
 	db.commit()
 	return redirect(url_for('show_players'))
