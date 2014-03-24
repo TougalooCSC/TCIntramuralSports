@@ -89,7 +89,21 @@ def logout():
 
 
 
+@app.route('/players', methods=['POST'])
+def add_player():
+	db = get_db()
+	print request.form
+	cur = db.execute('insert into players (firstname, lastname, playernumber, position) values (?,?,?,?)', [request.form['firstname'], request.form['lastname'], request.form['number'], request.form['position']])
+	db.commit()
+	return redirect(url_for('show_players'))
 
+
+@app.route('/players')
+def show_players():
+	db = get_db()
+	cur = db.execute('select firstname, lastname, playernumber, position from players')
+	players = cur.fetchall()
+	return render_template('show_players.html', players=players)
 
 if __name__ == '__main__':
 	app.run()

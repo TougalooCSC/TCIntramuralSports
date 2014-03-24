@@ -1,6 +1,15 @@
-drop table if exists entries;
-create table entries (
+drop table if exists teams;
+create table teams (
 	id integer primary key autoincrement,
-	title text not null,
-	text text not null
+	name text not null
+);
+drop table if exists players;
+create table players (
+	id integer primary key autoincrement,
+	firstname text not null,
+	lastname text not null,
+	playernumber integer,
+	position integer,
+	teamId integer 
+
 );

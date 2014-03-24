@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block body %}
+  {%  if session.logged_in %}
+    <form action="{{ url_for('add_player') }}" method=post class=add-entry>
+  	  <dl>
+  	    <dt>Name:
+  		  <dd><input type=text size=30 name=firstname>
+        <dd><input type=text size=30 name=lastname>
+  		  <dt>Team:
+        <dd><input type=text size=30 name=team>
+        <dt>Number:
+        <dd><input type=text size=30 name=number>
+        <dt>Position:
+        <select name=position>
+          <option value="1">Point Guard</option>
+          <option value="2">Shooting Guard</option>
+          <option value="3">Small Forward</option>
+          <option value="4">Power Forward</option>
+          <option value="5">Center</option>
+        </select>
+  		  <dd><input type=submit value=Share>
+  	 </dl>
+  </form>
+  {% endif %}
+  <table border="0">
+    <tr>
+    <th>Name</th>
+    <th>Team</th>
+    <th>Number</th>
+    <th>Position</th>
+    </tr>
+    {% for player in players%}
+      <tr>
+      <td> {{ player.firstname + " " + player.lastname }} </td>
+      <td> {{ player.teamId }}</td>   
+      <td> {{ player.playernumber }}</td>
+      <td> {{ player.position }} </td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
